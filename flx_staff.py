@@ -7,7 +7,7 @@ login = {
     "host": "mysql-flxvtc.alwaysdata.net",
     "user": "flxvtc",
     "password": "Fire112k#",
-    "database": "flxvtc_testing"
+    "database": "flxvtc_db"
 }
 
 
