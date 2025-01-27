@@ -4,9 +4,7 @@ import driveconnect as dc
 
 
 
-def form_window():
-    st.title("Staff Workspace")
-
+def show_form():
     labels = [
         "Discord ID", "Date (YYYY-MM-DD)", "From", "To", "Cargo", "Weight",
         "Distance", "Price", "Fuel", "Costs", "Truck", "Trailer", "Game",
