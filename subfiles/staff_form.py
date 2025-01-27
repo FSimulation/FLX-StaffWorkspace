@@ -1,75 +1,11 @@
-import random
-import requests
-import mysql.connector
+import random, requests, mysql.connector
 import streamlit as st
-
-login = {
-    "host": "mysql-flxvtc.alwaysdata.net",
-    "user": "flxvtc",
-    "password": "Fire112k#",
-    "database": "flxvtc_db"
-}
-
-
-
-
-def get_connection():
-    try:
-        return mysql.connector.connect(
-            host=login["host"],
-            user=login["user"],
-            password=login["password"],
-            database=login["database"],
-        )
-    except mysql.connector.Error as e:
-        st.error(f"Unable to connect to the database: {e}")
-        return None
-
-
-
-
-def login_window():
-    if 'logged_in' not in st.session_state:
-        st.session_state.logged_in = False
-
-    if st.session_state.logged_in:
-        form_window()
-    else:
-        st.image("logo.png", use_container_width=True)
-        st.title("Login")
-
-        username = st.text_input("Username")
-        password = st.text_input("Password", type="password")
-
-        if st.button("Login"):
-            conn = get_connection()
-            if conn is None:
-                return
-
-            try:
-                cursor = conn.cursor()
-                cursor.execute("SELECT is_staff FROM users WHERE username = %s AND password = %s", (username, password))
-                result = cursor.fetchone()
-
-                if result:
-                    is_staff = result[0]
-                    if is_staff == 1:
-                        st.success("Welcome to the staff workspace!")
-                        st.session_state.logged_in = True  # Mettre à jour l'état de la session
-                    else:
-                        st.warning("Access Denied: You are not allowed to login.")
-                else:
-                    st.error("Invalid username or password.")
-            except mysql.connector.Error as e:
-                st.error(f"An error occurred: {e}")
-            finally:
-                conn.close()
-
+import driveconnect as dc
 
 
 
 def form_window():
-    st.title("Logbook Entry")
+    st.title("Staff Workspace")
 
     labels = [
         "Discord ID", "Date (YYYY-MM-DD)", "From", "To", "Cargo", "Weight",
@@ -93,7 +29,7 @@ def form_window():
                 st.error(f"The field '{field}' is mandatory.")
                 return
 
-        conn = get_connection()
+        conn = dc.get_connection()
         if conn is None:
             return
 
@@ -165,6 +101,3 @@ def form_window():
             st.error(f"An error occurred: {e}")
         finally:
             conn.close()
-
-if __name__ == "__main__":
-    login_window()
